@@ -176,8 +176,9 @@ class App:
                 
             for fruit in self.fruits_list:
                 pyxel.blt(fruit[0], fruit[1], 0, 32, 16, 16, 16, 0)
-        if self.score > 15 and self.life > 0 :
-            pyxel.bltm(0, 0, 7, 0, 0, MAP_WIDTH * TILE, MAP_HEIGHT * TILE)
+                
+            if self.score > 15:
+                pyxel.bltm(0, 0, 6, 0, 0, MAP_WIDTH * TILE, MAP_HEIGHT * TILE)
                 
 #Gameover bloc                
         else:
