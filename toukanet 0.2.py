@@ -1,5 +1,6 @@
 import pyxel
 import random
+#first project version 0.2
 
 TILE = 8
 MAP_WIDTH = 64
