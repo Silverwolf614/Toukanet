@@ -14,13 +14,13 @@
 
 #0.3.1 Les fruits à ramasser sont ajoutés (tombés de ciel)
 
-#0.3.2 La gravitation des fruits(rester en platforme et au sol)
+#0.3.2 La gravitation des fruits(rester en platforme et au sol), menu de victoire ajouté
 
-#0.3.3 Nouveau système d'affichage des fruits: afficher seulement en platforme
+#0.3.3 Nouveau système d'affichage des fruits: afficher seulement en platforme, menu de victoire est changé par un menu de level up
 
 #0.3.4 Affichage de score réalisé
 
 #1.0 Version complète avec tous les fonctions demandées (au début)
 
-#1.1 Le menu, les différents mondes, nouveau système d'affichager message de LEVEL UP, et afficher le niveau actuel dans le jeu
+#1.1 Le menu, les différents mondes, nouveau système d'affichager message de LEVEL UP (remplacer le menu de level up), et afficher le niveau actuel dans le jeu
 
