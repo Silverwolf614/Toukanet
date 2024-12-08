@@ -1,0 +1,80 @@
+import pyxel
+
+# Configuration de la fenêtre et de l'environnement du jeu
+SCREEN_WIDTH = 160
+SCREEN_HEIGHT = 120
+GRAVITY = 0.5
+JUMP_STRENGTH = -6
+MOVE_SPEED = 2
+
+# Initialisation de Pyxel
+pyxel.init(SCREEN_WIDTH, SCREEN_HEIGHT, title="Toukanet")
+
+# Définition de l'environnement : sol et plateformes
+platform_y = SCREEN_HEIGHT - 8 # La position du sol
+platform_width = SCREEN_WIDTH # Largeur du sol
+
+# Variables du joueur
+player_width = 8
+player_height = 8
+player_x = 60 # Position initiale du joueur
+player_y = platform_y - player_height # Position initiale du joueur sur le sol
+velocity_y = 0 # Vitesse verticale du joueur
+is_jumping = False 
+
+# Définition de la scène : ici on ajoute une plateforme et un décor
+def draw():
+    pyxel.cls(0) # Efface l'écran avec une couleur de fond noire
+
+    # Dessiner le sol
+    pyxel.rect(0, platform_y, platform_width, 8, 8) # Le sol est gris 
+    
+    # Dessiner une plateforme pour le joueur à un autre niveau
+    pyxel.rect(40, platform_y - 16, 40, 8, 10) # Plateforme en haut, couleur 
+    
+    #  ajouter des blocs pourr un décor simple
+    for i in range(0, SCREEN_WIDTH, 16):
+        pyxel.rect(i, platform_y - 24, 8, 8, 7) # Simule des blocs de décor 
+
+    # Dessiner le joueur
+    pyxel.rect(player_x, player_y, player_width, player_height, 11) # Le joueur est un carré blanc 
+    
+    # Afficher les coordonnées du joueur en haut à gauche pour repère
+    pyxel.text(5, 5, f"X: {player_x} Y: {player_y}", 7)
+
+    # Actualiser l'affichage
+    pyxel.flip()
+
+# Mise à jour de la logique du jeu : contrôles et physique
+def update():
+    global player_x, player_y, velocity_y, is_jumping
+
+    # Déplacement à gauche/droite avec les flèches
+    if pyxel.btn(pyxel.KEY_LEFT):
+        player_x -= MOVE_SPEED
+    if pyxel.btn(pyxel.KEY_RIGHT):
+        player_x += MOVE_SPEED
+
+    # Saut avec la barre d'espace
+    if pyxel.btnp(pyxel.KEY_SPACE) and not is_jumping:
+        velocity_y = JUMP_STRENGTH
+        is_jumping = True
+
+    # Appliquer la gravité
+    velocity_y += GRAVITY
+    player_y += velocity_y
+
+    # Empêcher le joueur de sortir de l'écran horizontalement
+    if player_x < 0:
+        player_x = 0
+    if player_x > SCREEN_WIDTH - player_width:
+        player_x = SCREEN_WIDTH - player_width
+
+    # Collision avec le sol ou les plateformes
+    if player_y >= platform_y - player_height: # Si le joueur touche le sol
+        player_y = platform_y - player_height
+        is_jumping = False
+        velocity_y = 0
+    # Empêcher le joueur de tomber sous le sol
+    if player_y > platform_y:
+        player_y = platform_y
