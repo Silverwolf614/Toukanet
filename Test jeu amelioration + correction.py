@@ -1,4 +1,9 @@
 import pyxel
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#Ce que tu as fait c'est pas mal
+#mais l'inconvénient de ne pas dessiner le tilemap 
+#c'est qu'on ne peut pas faire des slide screen pour vrai
+#là ce que j'ai fait c'est comme une démonstration ou quoi
 
 # Configuration de la fenêtre et de l'environnement du jeu
 SCREEN_WIDTH = 160
