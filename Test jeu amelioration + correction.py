@@ -1,10 +1,8 @@
-import pyxel
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#Ce que tu as fait c'est pas mal
-#mais l'inconvénient de ne pas dessiner le tilemap 
-#c'est qu'on ne peut pas faire des slide screen pour vrai
-#là ce que j'ai fait c'est comme une démonstration ou quoi
 
+import pyxel
+
+WALL = (0, 1)
+CORRIDOR = (0, 0)
 # Configuration de la fenêtre et de l'environnement du jeu
 SCREEN_WIDTH = 160
 SCREEN_HEIGHT = 120
@@ -17,68 +15,96 @@ class App:
     def __init__(self):
         # Initialisation de Pyxel
         pyxel.init(SCREEN_WIDTH, SCREEN_HEIGHT, title="Toukanet")
-
+        pyxel.load("res.pyxres")
+        self.x = 0
+        self.x1 = 0
+        self.x2 = 0
+        self.y = 0
+        self.y1 = 0
+        self.y2 = 0
+        self.tile = (0, 0)
         # Place de camera
         self.camera_x = 0
         self.camera_y = 0
-        
         # Variables du joueur
         self.player_width = 8
         self.player_height = 8
         self.player_x = 60 # Position initiale du joueur
         self.player_y = SCREEN_HEIGHT - self.player_height - 8 # Position initiale du joueur sur le sol
+        self.new_x = 0
+        self.new_y = 0
         self.velocity_y = 0 # Vitesse verticale du joueur
         self.is_jumping = False 
-        # Définition de la scène : ici on ajoute une plateforme et un décor
+        
         pyxel.run(self.update, self.draw)
     # Mise à jour de la logique du jeu : contrôles et physique
     def update(self):
     
         # Déplacement à gauche/droite avec les flèches
+        self.new_x = self.player_x
+        self.new_y = self.player_y
+        
         if pyxel.btn(pyxel.KEY_LEFT):
-            self.player_x -= MOVE_SPEED
+            self.new_x -= MOVE_SPEED
         if pyxel.btn(pyxel.KEY_RIGHT):
-            self.player_x += MOVE_SPEED
-    
+            self.new_x += MOVE_SPEED
+
         # Saut avec la barre d'espace
         if pyxel.btnp(pyxel.KEY_SPACE) and not self.is_jumping:
             self.velocity_y = JUMP_STRENGTH
             self.is_jumping = True
-    
+
         # Appliquer la gravité
         self.velocity_y += GRAVITY
-        self.player_y += self.velocity_y
-    
-        # Empêcher le joueur de sortir de l'écran horizontalement
-        if self.player_x < 0:
-            self.player_x = 0
-        if self.player_x > SCREEN_WIDTH - self.player_width:
-            self.player_x = SCREEN_WIDTH - self.player_width
-    
-        # Collision avec le sol ou les plateformes
-        if self.player_y >= SCREEN_HEIGHT - self.player_height - 8: # Si le joueur touche le sol
-            self.player_y = SCREEN_HEIGHT- self.player_height - 8
-            self.is_jumping = False
-            self.velocity_y = 0
-        # Mise à jour de la place de camera
-        self.camera_x = self.player_x - SCREEN_WIDTH // 2
-        self.camera_x = max(0, min(self.camera_x, MAP_WIDTH - SCREEN_WIDTH))
+        self.new_y += self.velocity_y
+
+        # Collision horizontale
+
+        self.x = self.new_x // 8
+        self.y1 = self.player_y // 8
+        self.y2 = (self.player_y + self.player_height - 1) // 8
+
+            # Vérifie les tuiles dans la direction horizontale
+        if (pyxel.tilemap(0).pget(self.x, self.y1) == WALL or pyxel.tilemap(0).pget(self.x, self.y2) == WALL):
+            self.new_x = self.player_x  
+    # Bloque le mouvement horizontal
+
+        # Collision verticale
+        self.x1 = self.player_x // 8
+        self.x2 = (self.player_x + self.player_width - 1) // 8
+        self.y = self.new_y // 8
+
+            # Vérifie les tuiles dans la direction verticale
+        if (pyxel.tilemap(0).pget(self.x1, self.y) == WALL or
+            pyxel.tilemap(0).pget(self.x2, self.y) == WALL):
+            if self.velocity_y > 0:  # Collision depuis le haut
+                self.new_y = self.y * 8 - self.player_height
+                self.velocity_y = 0
+                self.is_jumping = False
+            elif self.velocity_y < 0:  # Collision depuis le bas
+                self.new_y = (self.y + 1) * 8
+                self.velocity_y = 0
+
+        # Met à jour les coordonnées du joueur
+        self.player_x = self.new_x
+        self.player_y = self.new_y
+
+        # Mise à jour de la caméra
+        self.camera_x = max(0, min(self.player_x - SCREEN_WIDTH // 2, MAP_WIDTH - SCREEN_WIDTH))
         
     def draw(self):
-        pyxel.cls(0) # Efface l'écran avec une couleur de fond noire
-        # Répétition d'un décor simple
-        for i in range(0, MAP_WIDTH, 16):
-            pyxel.rect(i - self.camera_x, SCREEN_HEIGHT - 16, 16, 16, 7)  # sol
-            if i % 32 == 0:  # les petits arbres
-                pyxel.rect(i - self.camera_x, SCREEN_HEIGHT - 32, 8, 16, 3)
-    
+        pyxel.cls(0) # Efface l'écran avec une couleur de fond noir
+        pyxel.bltm(0, 0, 0, self.camera_x, self.camera_y, MAP_WIDTH, MAP_HEIGHT)
         # Dessiner le joueur
-        pyxel.rect(
+        pyxel.blt(
             self.player_x - self.camera_x,
             self.player_y - self.camera_y,
+            0,
+            8,
+            0,
             self.player_width,
             self.player_height,
-            11) # Le joueur est un carré blanc 
+            0) # Le joueur est un carré blanc 
         
         # Afficher les coordonnées du joueur en haut à gauche pour repère
         pyxel.text(5, 5, f"X: {self.player_x} Y: {self.player_y}", 7)
