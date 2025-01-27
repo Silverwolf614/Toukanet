@@ -1,0 +1,97 @@
+import random
+
+
+operation = '+ - * /'
+operation_bis = operation.split()
+nombre_carte=[n for n in range(1,21)]
+
+def verification_proposition(calcul,nombre):
+    resultat = 0
+    tmp_nombre=[]
+    tmp_operation=[]
+    calcul_bis=calcul.split()
+    for element in calcul_bis :
+        if element not in operation_bis : 
+            if resultat==0 :
+                resultat = int(element)
+            else :
+                if len(tmp_operation)==0 :
+                    return False
+                else :
+                    op = tmp_operation.pop()
+                    if op=='-' :
+                        resultat -= int(element)
+                    elif op=='+' :
+                        resultat += int(element)
+                    elif op=='*' :
+                        resultat *= int(element)
+                    else :
+                        resultat /= int(element)
+
+        else :
+            tmp_operation.append(element)
+    
+    if resultat == nombre :
+        return True
+    else :
+        return False
+            
+
+
+
+nombre_inconnu = random.randint(1,100)
+
+choice=[]
+
+cpt = 0
+while cpt != 5 : 
+
+    nombre = random.choice(nombre_carte)
+    if nombre not in choice :
+        choice.append(nombre)
+        cpt = cpt + 1
+
+print('Calcul le nombre ',nombre_inconnu, ' ou une valeur approchée,\n avec la liste des nombres suivants : ', choice,' .')
+
+boucle = True
+while boucle :
+    joueur_1_nombre = int(input('Quelle est votre proposition, joueur 1 ?'))
+    joueur_2_nombre = int(input('Quelle est votre proposition, joueur 2 ?'))
+    if joueur_1_nombre == nombre_inconnu :
+        print('bravo joueur 1 , donne ta proposition du compte est bon ....')
+        proposition_joueur_1 = input('C\'est à toi : ' )
+        if verification_proposition(proposition_joueur_1,joueur_1_nombre) :
+            print('Bravo vous avez gagné !')
+            boucle = False
+        else :
+            print('Non, ce n\'est pas correct ! Recommencer ....')
+
+    elif joueur_2_nombre == nombre_inconnu :
+        print('bravo joueur 2 , donne ta proposition du compte est bon ....')
+        proposition_joueur_1 = input('C\'est à toi : ' )
+        if verification_proposition(proposition_joueur_2,joueur_2_nombre) :
+            print('Bravo vous avez gagné !')
+            boucle = False
+        else :
+            print('Non, ce n\'est pas correct ! Recommencer ....')
+    elif abs(joueur_1_nombre-nombre_inconnu)<abs(joueur_2_nombre-nombre_inconnu) :
+        print('bravo joueur 1 tu es le plus proche du nombre à trouver, donne ta solution ...')
+        proposition_joueur_1 =  input('C\'est à toi : ' )
+        if verification_proposition(proposition_joueur_1,joueur_1_nombre) :
+            print('Bravo vous avez gagné !')
+            boucle = False
+        else :
+            print('Non, ce n\'est pas correct ! Recommencer ....')
+    else :
+        print('bravo joueur 2 tu es le plus proche du nombre à trouver, donne ta solution ...')
+        proposition_joueur_2 =  input('C\'est à toi : ' )
+        if verification_proposition(proposition_joueur_2,joueur_2_nombre) :
+            print('Bravo vous avez gagné !')
+            boucle = False
+        else :
+            print('Non, ce n\'est pas correct ! Recommencer ....')
+    
+
+
+
+
