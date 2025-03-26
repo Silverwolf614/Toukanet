@@ -1,0 +1,81 @@
+import random
+
+# Définir les opérations disponibles
+operation = '+ - * /'
+operations = operation.split()
+
+# Liste des nombres disponibles
+nombres_carte = [n for n in range(1, 21)]
+
+# Fonction pour vérifier la validité de la proposition d'un joueur
+def verification_proposition(calcul, nombre_cible):
+    try:
+        # Calculer le résultat de la proposition
+        resultat = eval(calcul)
+        # Vérifier si le résultat est égal au nombre cible
+        if resultat == nombre_cible:
+            return True
+        else:
+            return False
+    except: 
+        # Si une erreur de calcul se produit (ex. division par zéro), retourner False
+        return False
+    
+def verification(proposition_1,proposition_2,nombre_cible):
+    nombre_1 = eval(proposition_1)
+    nombre_2 = eval(proposition_2)
+
+    if nombre_1 == nombre_cible or abs(nombre_1-nombre_cible)<abs(nombre_2-nombre_cible): 
+        print("Bravo joueur 1 tu as gagné !")
+        boucle = False
+    elif nombre_2 == nombre_cible or abs(nombre_2-nombre_cible)<abs(nombre_1-nombre_cible): 
+        print("Bravo joueur 2 tu as gagné !")
+        boucle = False
+    else : 
+        print("Personne n'a gagné !")
+
+
+
+    
+
+# Générer un nombre cible aléatoire entre 1 et 100
+nombre_cible = random.randint(1, 100)
+
+# Choisir 6 nombres aléatoires parmi la liste des nombres
+choix = random.sample(nombres_carte, 6)
+
+print(f"Le nombre cible à atteindre est : {nombre_cible}")
+print(f"Les nombres disponibles sont : {choix}")
+
+# Jeu principal
+boucle = True
+while boucle: 
+    cpt = 0
+    # si repetition false nombre repeter (problème)
+    repetition = False
+    # Demander à chaque joueur de faire une proposition
+    joueur_1_proposition = input("Joueur 1, proposez une expression (ex : 5 + 3 * 2) : ")
+    joueur_2_proposition = input("Joueur 2, proposez une expression (ex : 5 + 3 * 2) : ")
+    for nombre in nombres_carte:
+        for element in joueur_1_proposition:
+            if nombre == element:
+                cpt += 1
+            
+            if cpt > 1:
+                # si repetition true pas de nombre reperter (fontionelle)
+                repetition = True
+                
+    
+    # Vérifier si les propositions des joueurs sont correctes
+
+    verification(joueur_1_proposition,joueur_2_proposition,nombre_cible)
+
+    ''' if verification_proposition(joueur_1_proposition, nombre_cible):
+            print("Bravo Joueur 1 ! Vous avez trouvé la solution !")
+            boucle = False
+        elif verification_proposition(joueur_2_proposition, nombre_cible):
+            print("Bravo Joueur 2 ! Vous avez trouvé la solution !")
+            boucle = False
+        else:
+            # Si aucune des propositions n'est correcte, afficher un message et recommencer
+            print("Aucune proposition n'est correcte, réessayez !")'''
