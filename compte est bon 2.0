@@ -1,0 +1,97 @@
+import random
+import re
+
+# Définir les opérations disponibles
+operations = ['+', '-', '*', '/']
+
+# Liste des nombres disponibles
+nombres_carte = list(range(1, 21))
+
+# Générer un nombre cible aléatoire entre 1 et 100
+nombre_cible = random.randint(1, 100)
+
+# Choisir 6 nombres aléatoires
+choix = random.sample(nombres_carte, 6)
+
+# Fonction pour extraire les nombres d'une expression
+def extraire_nombres(expression):
+    return list(map(int, re.findall(r'\d+', expression)))
+
+# Fonction de vérification de la proposition
+def proposition_valide(expression, nombres_disponibles):
+    try:
+        # Extraire les nombres utilisés dans l'expression
+        nombres_utilises = extraire_nombres(expression)
+        
+        # Vérifier si tous les nombres sont dans la liste et pas en double (à moins d’être disponibles plusieurs fois)
+        temp_choix = nombres_disponibles.copy()
+        for n in nombres_utilises:
+            if n in temp_choix:
+                temp_choix.remove(n)
+            else:
+                return False  # Nombre non autorisé ou utilisé plusieurs fois
+        
+        # Vérifier si l'expression est valide
+        eval(expression)  # Pour voir s’il y a une erreur comme une division par 0
+        return True
+    except:
+        return False
+
+# Fonction principale de vérification
+def verification(proposition_1, proposition_2, nombre_cible):
+    resultat_1 = eval(proposition_1)
+    resultat_2 = eval(proposition_2)
+
+    print(f"Résultat de Joueur 1 : {proposition_1} = {resultat_1}")
+    print(f"Résultat de Joueur 2 : {proposition_2} = {resultat_2}")
+    print(f"Nombre cible : {nombre_cible}")
+
+    diff_1 = abs(nombre_cible - resultat_1)
+    diff_2 = abs(nombre_cible - resultat_2)
+
+    if diff_1 == 0 and diff_2 == 0:
+        print("Égalité parfaite ! Les deux joueurs ont trouvé le bon résultat.")
+        return True
+    elif diff_1 == 0:
+        print("Bravo Joueur 1 ! Vous avez trouvé le bon résultat.")
+        return True
+    elif diff_2 == 0:
+        print("Bravo Joueur 2 ! Vous avez trouvé le bon résultat.")
+        return True
+    elif diff_1 < diff_2:
+        print(f"Aucun joueur n'a trouvé le bon résultat. Joueur 1 est le plus proche avec {resultat_1}.")
+        return True
+    elif diff_2 < diff_1:
+        print(f"Aucun joueur n'a trouvé le bon résultat. Joueur 2 est le plus proche avec {resultat_2}.")
+        return True
+    else:
+        print("Égalité, mais aucun joueur n'a trouvé la solution exacte.")
+        return True
+
+# Affichage du jeu
+print(f"Le nombre cible à atteindre est : {nombre_cible}")
+print(f"Les nombres disponibles sont : {choix}")
+
+# Boucle principale
+while True:
+    joueur_1 = input("Joueur 1, entrez votre expression : ")
+    joueur_2 = input("Joueur 2, entrez votre expression : ")
+
+    valide_1 = proposition_valide(joueur_1, choix)
+    valide_2 = proposition_valide(joueur_2, choix)
+
+    if not valide_1 and not valide_2:
+        print("Les deux joueurs ont fait une erreur (nombres invalides ou répétés). Personne ne gagne.")
+        break
+    elif not valide_1 and valide_2:
+        print("Joueur 1 a utilisé des nombres invalides ou répétés.")
+        print("Joueur 2 gagne par l'erreur de Joueur 1.")
+        break
+    elif not valide_2 and valide_1:
+        print("Joueur 2 a utilisé des nombres invalides ou répétés.")
+        print("Joueur 1 gagne par l'erreur de Joueur 2.")
+        break
+    else:
+        # Les deux propositions sont valides, on les évalue normalement
+        if verification(joueur_1, joueur_2, nombre_cible):
+            break
