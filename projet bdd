@@ -1,0 +1,31 @@
+Activité 1
+
+B) OUVERTURE D’UNE BASE Ouvrir le logiciel DB Browser. Ouvrir la base de données nommée « tableauAtome.db ». Combien de tables (ou relation) y-a-t-il dans cette base ? Nommez-les.
+CREATE TABLE "atomes" ( "Id" INTEGER NOT NULL, "Nom" TEXT, "slug" TEXT, "electron" TEXT, "numero" INTEGER, "symbole" TEXT, "info_groupe" TEXT, "info_periode" INTEGER, "info_bloc" TEXT, "masse_volumique" TEXT, "cas" TEXT, "einecs" TEXT, "masse_Atomique" TEXT, "Rayon_Atomique" TEXT, "Rayon_covalence" INTEGER, "Rayon_de_van_der_waals" TEXT, "Config_électronique" TEXT, "etat_oxydation" TEXT, "Annee_decouverte" TEXT, "Nom_découverte" TEXT, "Pays_decouverte" TEXT, "Electronegativite" TEXT, "point_fusion" TEXT, "Point_ebullition" TEXT, "Est_radioactif" INTEGER, PRIMARY KEY("Id") )
+C) LECTURE D’UNE TABLE Dénombrer les attributs présents, les nommer et précisez leur type. Sélectionner l’onglet « Exécuter le SQL » Entrez le code SQL suivant : « SELECT * FROM atomes WHERE Nom="Hydrogène"; ». Exécuter-le ! Quel est le résultat Obtenu ?
+"Id" INTEGER NOT NULL, "Nom" TEXT, "slug" TEXT, "electron" TEXT, "numero" INTEGER, "symbole" TEXT, "info_groupe" TEXT, "info_periode" INTEGER, "info_bloc" TEXT, "masse_volumique" TEXT, "cas" TEXT, "einecs" TEXT, "masse_Atomique" TEXT, "Rayon_Atomique" TEXT, "Rayon_covalence" INTEGER, "Rayon_de_van_der_waals" TEXT, "Config_électronique" TEXT, "etat_oxydation" TEXT, "Annee_decouverte" TEXT, "Nom_découverte" TEXT, "Pays_decouverte" TEXT, "Electronegativite" TEXT, "point_fusion" TEXT, "Point_ebullition" TEXT, "Est_radioactif" INTEGER, PRIMARY KEY("Id"	
+
+ 
+
+Poursuivez avec « SELECT COUNT(Nom) FROM atomes; ». Et là nous obtenons quoi ?
+
+
+ 
+
+
+Puis « SELECT * FROM atomes WHERE symbole LIKE "N%"; »
+Qu’obtenons-nous ?
+
+ 
+
+
+ Et ici, « SELECT * FROM atomes WHERE Est_radioactif = 1 ; »
+
+
+Et encore , « SELECT MAX(Rayon_covalence) FROM atomes; »
+
+ 
+
+D) CREATION D’UNE TABLE « DECOUVREURS » ET ALIMENTATION Vous aller créer une nouvelle table nommée « decouvreurs ». Les attributs et leur attribut lié sont les suivants : Id INTEGER, Nom TEXT, Prenom TEXT, Date_naissance TEXT, Date_deces TEXT, DomaineScience TEXT, Distinction TEXT. La clé primaire sera l’attribut Id. Maintenant faites vos recherches pour alimenter la base en données.
+
+
